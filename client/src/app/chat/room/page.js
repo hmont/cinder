@@ -21,7 +21,7 @@ const montserrat = Montserrat({
 
 function SendChatButton() {
   const onClick = () => {
-    console.log('Button clicked!');
+    // send chat
   };
 
   return (
