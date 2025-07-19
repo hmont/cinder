@@ -19,6 +19,19 @@ const montserrat = Montserrat({
   subsets: ["latin"]
 });
 
+function SendChatButton() {
+  const onClick = () => {
+    console.log('Button clicked!');
+  };
+
+  return (
+    <button
+      className="bg-neutral-700 px-8 py-2 rounded-md create"
+      onClick={onClick}>
+        send message
+    </button>
+  );
+}
 
 export default function Home() {
   useEffect(() => {
@@ -39,25 +52,18 @@ export default function Home() {
           <div id="content" className={`rounded-lg grow-in w-2xl px-8 py-8 mx-auto bg-neutral-900 ${montserrat.className}`}>
             <h2 className="text-2xl">
                 <a href="/">
-                    create a chatroom
+                    example chatroom
                 </a>
             </h2>
 
             <input
               className="bg-neutral-700 rounded-md px-2 py-2 mt-6"
-              placeholder="nickname (optional)">
+              placeholder="send message">
 
             </input>
 
-            <p className="text-neutral-600 mt-2 text-sm">
-              don't worry, your nickname will be encrypted end-to-end as well!
-            </p>
-
             <div className="items-right text-right mt-6">
-                <button
-                  className="bg-neutral-700 px-8 py-2 rounded-md create">
-                    start chatroom
-                </button>
+                <SendChatButton />
             </div>
           </div>
         </div>

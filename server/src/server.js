@@ -1,4 +1,4 @@
-import { WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws'
 import 'dotenv/config';
 
 const SERVER_HOST = process.env.SERVER_HOST;
