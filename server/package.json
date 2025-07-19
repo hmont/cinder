@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "cinder server application",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "test": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hmont/cinder.git"
+  },
+  "keywords": [
+    "rtc"
+  ],
+  "author": "Henry Monteith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hmont/cinder/issues"
+  },
+  "homepage": "https://github.com/hmont/cinder#readme",
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "ws": "^8.18.3"
+  }
+}

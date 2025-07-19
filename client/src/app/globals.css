@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+html {
+  background-color: #000000;
+  color: white;
+  font-family: 'Montserrat';
+}
+
+h1 {
+  font-family: 'DM Serif Text';
+}

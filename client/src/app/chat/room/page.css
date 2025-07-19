@@ -1,0 +1,19 @@
+.grow-in {
+    animation: growIn 1s ease;
+}
+
+.create {
+    cursor: pointer;
+}
+
+@keyframes growIn {
+    from {
+        transform: scale(0, 0);
+        opacity: 0%;
+    }
+
+    to {
+        transform: scale(1, 1);
+        opacity: 100%;
+    }
+}
