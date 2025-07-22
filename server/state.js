@@ -13,7 +13,7 @@ export function newChatroom(id) {
 
     setTimeout(() => {
         chatrooms.delete(id);
-        console.log(`Room ${roomId} auto-deleted.`);
+        console.log(`Room ${id} auto-deleted.`);
     }, 10 * 60 * 1000);
 
     chatrooms.set(id, room);
@@ -26,8 +26,14 @@ export function broadcast(roomID, msg) {
         return;
     }
 
+    room.users = room.users.filter(user => user.readyState === 1);
+
     room.users.forEach(user => {
-        user.send(JSON.stringify(msg));
+        try {
+            user.send(JSON.stringify(msg));
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
     });
 }
 

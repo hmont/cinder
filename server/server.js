@@ -12,10 +12,16 @@ const PORT = parseInt(process.env.SERVER_PORT);
 
 export const app = express();
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({
+    server,
+    path: '/ws'
+});
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 
 app.post('/api/chat/create', createChat);
 

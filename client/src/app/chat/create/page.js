@@ -23,11 +23,9 @@ const montserrat = Montserrat({
   subsets: ["latin"]
 });
 
+let BASE_URL;
 
 
-async function createRoom() {
-
-}
 
 function CreateRoomButton() {
   const onClick = async () => {
@@ -73,37 +71,29 @@ function NicknameInput() {
   );
 }
 
-function CreateChatroomContent() {
-  return (
-    <div id="content" className={`rounded-lg grow-in w-2xl px-8 py-8 mx-auto bg-neutral-900 ${montserrat.className}`}>
-      <h2 className="text-2xl">
-        <a href="/">
-          create a chatroom
-        </a>
-      </h2>
-
-      <NicknameInput />
-
-      <div className="items-right text-right mt-6">
-        <CreateRoomButton />
-      </div>
-    </div>
-  );
-}
-
 export default function CreateChat() {
   useEffect(() => {
-    const resp = fetch(`http://${config.SERVER_HOST}:${config.SERVER_PORT}/api/chat/create`, {
+    if (config.DEVELOPMENT_MODE) {
+      BASE_URL = `http://${config.SERVER_HOST}:${config.SERVER_PORT}`;
+    } else {
+      let split_url = window.location.origin.split('/');
+      BASE_URL = `https://${split_url[split_url.length-1]}`;
+    }
+
+    fetch(`${BASE_URL}/api/chat/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
+      mode: 'cors'
     }).then(data => {
       return data.json();
     }).then(jsonData => {
       let roomID = jsonData.code;
 
       window.location.href = `/chat/join?id=${roomID}`;
+    }).catch(error => {
+      console.error('Error creating room:', error);
     });
   }, []);
 

@@ -1,15 +1,10 @@
 "use client";
 
-import { replace, useNavigate } from "react-router-dom";
-
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { v4 } from 'uuid';
 
 import { DM_Serif_Text, Montserrat } from "next/font/google";
-
-import randomBytes from 'crypto';
-import config from '../../config.js'
 
 import '../../globals.css';
 import './page.css'
@@ -97,7 +92,8 @@ function NicknameInput() {
         placeholder="nickname (optional)">
       </input>
       <p className="text-neutral-600 mt-2 text-sm">
-        don't worry, your nickname will be encrypted end-to-end as well!
+        your nickname will not be encrypted end-to-end.<br></br>
+        don't use your real name!
       </p>
     </div>
   );
@@ -120,7 +116,6 @@ function JoinChatroomContent() {
     </div>
   );
 }
-
 
 export default function JoinChat() {
   useEffect(() => {
