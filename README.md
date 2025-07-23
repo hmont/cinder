@@ -1,2 +1,0 @@
-# cinder
-Real-time chat
