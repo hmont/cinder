@@ -1,26 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { DM_Serif_Text, Montserrat } from "next/font/google";
+
+import Link from 'next/link';
 
 import '../../globals.css';
 import './page.css'
 
 import 'animate.css';
-
-import config from "../../config.js";
+import { formatTime } from "@/app/utils";
 
 let privkey = null;
 let pubkey = null;
 let socket = null;
 
 let BASE_URL;
-
-
-
-const SERVER_HOST = config.SERVER_HOST;
-const SERVER_PORT = config.SERVER_PORT;
 
 const montserrat = Montserrat({
   weight: "400",
@@ -35,10 +31,10 @@ const dmSerif = DM_Serif_Text({
 function Navbar() {
   return (
     <div id="navbar" className="w-screen flex px-4 py-4">
-      <h1 className="text-3xl">
-        <a href="/">
+      <h1 className={`text-3xl ${dmSerif.className}`}>
+        <Link href='/'>
           cinder
-        </a>
+        </Link>
       </h1>
     </div>
   );
@@ -138,9 +134,7 @@ function ChatContent() {
   return (
     <div id="content" className={`rounded-lg grow-in w-2xl px-8 py-8 mx-auto mb-4 bg-neutral-900 ${montserrat.className}`}>
       <h2 className="text-2xl">
-        <a href="/">
-          chat room
-        </a>
+        chat room
       </h2>
 
       <ChatInput />
@@ -163,6 +157,21 @@ function ChatContent() {
 }
 
 export default function ChatRoom() {
+  let [ttl, setTTL] = useState(600);
+
+  function Timer() {
+    return (
+      <div className="text-center mb-6">
+        <h2>
+          room will self-destruct in:
+        </h2>
+        <h1 id="time-remaining" className={`text-3xl ${montserrat.className}`}>
+          {formatTime(ttl)}
+        </h1>
+      </div>
+    )
+  }
+
   useEffect(() => {
     const initializeKeys = async () => {
       const privateKeyData = window.sessionStorage.getItem('cinder-private');
@@ -207,8 +216,8 @@ export default function ChatRoom() {
 
     initializeKeys();
 
-    if (config.DEVELOPMENT_MODE) {
-      BASE_URL = `ws://${config.SERVER_HOST}:${config.SERVER_PORT}`;
+    if (process.env.DEVELOPMENT_MODE) {
+      BASE_URL = `ws://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
     } else {
       let split_url = window.location.origin.split('/');
       BASE_URL = `wss://${split_url[split_url.length-1]}`;
@@ -262,9 +271,15 @@ export default function ChatRoom() {
       }).catch((error) => {
         console.error('Failed to join room:', error.message);
         socket.close();
-        window.location.href = '/';
+        // window.location.href = '/';
       });
     };
+
+    setInterval(() => {
+      socket.send(JSON.stringify({
+        type: 'heartbeat'
+      }))
+    }, 30000);
 
     socket.onmessage = async (e) => {
       let data = JSON.parse(e.data);
@@ -337,8 +352,17 @@ export default function ChatRoom() {
         case "system":
           if (!data.payload.success) {
             socket.close();
-            window.location.href = '/';
+            // window.location.href = '/';
           }
+
+          if (data.payload.ttl != null) {
+            setTTL(data.payload.ttl);
+          }
+
+          setInterval(() => {
+            setTTL(prev => prev > 0 ? prev - 1 : 0);
+          }, 1000);
+
           break;
       }
     }
@@ -355,6 +379,7 @@ export default function ChatRoom() {
     <div>
       <div className="max-h-screen">
         <Navbar />
+        <Timer />
         <ChatContent />
       </div>
     </div>

@@ -7,9 +7,8 @@ import { DM_Serif_Text, Montserrat } from "next/font/google";
 import '../../globals.css';
 import './page.css'
 
-import config from '../../config.js';
-
 import 'animate.css';
+import Link from "next/link";
 
 export const overlayContext = React.createContext(false);
 
@@ -47,34 +46,19 @@ function CreateRoomButton() {
 function Navbar() {
   return (
     <div id="navbar" className="w-screen flex px-4 py-4">
-      <h1 className="text-3xl">
-        <a href="/">
+      <h1 className={`text-3xl ${dmSerif.className}`}>
+        <Link href='/'>
           cinder
-        </a>
+        </Link>
       </h1>
-    </div>
-  );
-}
-
-function NicknameInput() {
-  return (
-    <div>
-      <input
-        id="nickname-input"
-        className="bg-neutral-700 rounded-md px-2 py-2 mt-6"
-        placeholder="nickname (optional)">
-      </input>
-      <p className="text-neutral-600 mt-2 text-sm">
-        don't worry, your nickname will be encrypted end-to-end as well!
-      </p>
     </div>
   );
 }
 
 export default function CreateChat() {
   useEffect(() => {
-    if (config.DEVELOPMENT_MODE) {
-      BASE_URL = `http://${config.SERVER_HOST}:${config.SERVER_PORT}`;
+    if (process.env.DEVELOPMENT_MODE) {
+      BASE_URL = `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
     } else {
       let split_url = window.location.origin.split('/');
       BASE_URL = `https://${split_url[split_url.length-1]}`;

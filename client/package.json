@@ -16,7 +16,6 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "animate.css": "^4.1.1",
     "aos": "^2.3.4",
-    "dotenv": "^17.2.0",
     "font-awesome": "^4.7.0",
     "next": "15.4.1",
     "node-rsa": "^1.1.1",
@@ -24,6 +23,7 @@
     "react-animate-on-scroll": "^2.1.9",
     "react-dom": "19.1.0",
     "react-router-dom": "^7.7.0",
+    "typescript": "^5.8.3",
     "uuid": "^11.1.0",
     "ws": "^8.18.3"
   },

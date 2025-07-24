@@ -1,5 +1,7 @@
 import { broadcast, getChatrooms } from "../state.js";
 
+import { redisClient } from "../controllers/redis.js";
+
 export function setupWSHandlers(wss) {
   wss.on('connection', (ws) => {
     console.log('New WebSocket connection');
@@ -17,21 +19,21 @@ export function setupWSHandlers(wss) {
       console.error('WebSocket error:', err);
     });
   });
+}
 
-  function process(ws, msg) {
-    let data = JSON.parse(msg);
+function process(ws, msg) {
+  let data = JSON.parse(msg);
 
-    switch (data.type) {
-      case "message":
-        sendMessage(data);
-        break;
-      case "join":
-        processJoin(ws, data);
-        break;
-      case "handshake":
-        processHandshake(ws, data);
-        break;
-    }
+  switch (data.type) {
+    case "message":
+      sendMessage(data);
+      break;
+    case "join":
+      processJoin(ws, data);
+      break;
+    case "handshake":
+      processHandshake(ws, data);
+      break;
   }
 }
 
@@ -47,19 +49,21 @@ function processHandshake(ws, msg) {
   broadcast(room_id, msg);
 }
 
-function processJoin(ws, msg) {
+async function processJoin(ws, msg) {
   let room = getChatrooms().get(msg.payload.room);
 
   if (!room) {
-      ws.send(JSON.stringify({
-        type: "system",
-        payload: {
-          "success": false,
-          "message": "room does not exist"
-        }
-      }));
+    let _payload = {
+      "success": false,
+      "message": "room does not exist"
+    }
 
-      ws.close();
+    ws.send(JSON.stringify({
+      type: "system",
+      payload: _payload
+    }));
+
+    ws.close();
 
     return;
   }
@@ -70,28 +74,33 @@ function processJoin(ws, msg) {
   // Check if user is already in the room
   for (let i = 0; i < room.users.length; i++) {
     if (room.users[i].session_id === msg.payload.session_id) {
+      let _payload = {
+        "success": false,
+        "message": "already in room"
+      }
+
       ws.send(JSON.stringify({
-          type: "system",
-          payload: {
-            "success": false,
-            "message": "already in room"
-          }
-        }));
+        type: "system",
+        payload: _payload
+      }));
 
-        ws.close();
+      ws.close();
 
-        return;
+      console.log('Sent', _payload.toString());
+
+      return;
     }
   }
 
-  // Check capacity after cleaning up and checking duplicates
   if (room.users.length >= 2) {
+    let _payload = {
+      "success": false,
+      "message": "room is full"
+    }
+
     ws.send(JSON.stringify({
       type: "system",
-      payload: {
-        "success": false,
-        "message": "room is full"
-      }
+      payload: _payload
     }));
 
     ws.close();
@@ -103,10 +112,15 @@ function processJoin(ws, msg) {
   ws.session_id = msg.payload.session_id;
   room.users.push(ws);
 
+  const ttl = await redisClient.ttl(msg.payload.room);
+
+  let _payload = {
+    "success": true,
+    "ttl": ttl
+  };
+
   ws.send(JSON.stringify({
-      type: "system",
-      payload: {
-        "success": true,
-      }
-    }));
+    type: "system",
+    payload: _payload
+  }));
 }

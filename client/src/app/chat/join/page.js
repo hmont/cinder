@@ -2,6 +2,8 @@
 
 import React, { useEffect } from "react";
 
+import Link from 'next/link';
+
 import { v4 } from 'uuid';
 
 import { DM_Serif_Text, Montserrat } from "next/font/google";
@@ -74,10 +76,10 @@ function JoinRoomButton() {
 function Navbar() {
   return (
     <div id="navbar" className="w-screen flex px-4 py-4">
-      <h1 className="text-3xl">
-        <a href="/">
+      <h1 className={`text-3xl ${dmSerif.className}`}>
+        <Link href='/'>
           cinder
-        </a>
+        </Link>
       </h1>
     </div>
   );
@@ -93,7 +95,7 @@ function NicknameInput() {
       </input>
       <p className="text-neutral-600 mt-2 text-sm">
         your nickname will not be encrypted end-to-end.<br></br>
-        don't use your real name!
+        don&apos;t use your real name!
       </p>
     </div>
   );
@@ -103,9 +105,7 @@ function JoinChatroomContent() {
   return (
     <div id="content" className={`rounded-lg grow-in w-2xl px-8 py-8 mx-auto bg-neutral-900 ${montserrat.className}`}>
       <h2 className="text-2xl">
-        <a href="/">
-          joining chatroom
-        </a>
+        joining chatroom
       </h2>
 
       <NicknameInput />

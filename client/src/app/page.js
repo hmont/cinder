@@ -80,7 +80,7 @@ function FeaturesSection() {
           <h2 className="text-3xl mt-6">encrypted</h2>
           <h2 className="text-md text-gray-400 mt-4">
             all chats are end-to-end encrypted. that means no one other than
-            you and the person you're chatting with can read them—not even us.
+            you and the person you&apos;re chatting with can read them—not even us.
           </h2>
         </div>
         <div id="encrypted" data-aos="fade-up" data-aos-delay="400">

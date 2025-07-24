@@ -2,6 +2,7 @@ import express from 'express';
 import { WebSocketServer } from 'ws';
 import http from 'http';
 import cors from 'cors';
+
 import 'dotenv/config';
 
 import { createChat } from './routes/chat.js';
