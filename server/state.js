@@ -5,6 +5,10 @@ chatrooms.set('dev', {
     timer: Date.now()
 });
 
+export function getChatroom(id) {
+    return chatrooms.get(id);
+}
+
 export function newChatroom(id) {
     const room = {
         users: [],
@@ -35,6 +39,27 @@ export function broadcast(roomID, msg) {
             console.error('Error sending message:', error);
         }
     });
+}
+
+export function replace(roomId, sessionId, ws) {
+    let room = getChatroom(roomId);
+
+    if (!room) {
+        return false;
+    }
+
+    let success = false;
+
+    for (let i = 0; i < room.users.length; i++) {
+        if (room.users[i].session_id === sessionId) {
+            ws.session_id = sessionId
+            room.users[i] = ws;
+            success = true;
+            break;
+        }
+    }
+
+    return success;
 }
 
 export function getChatrooms() {

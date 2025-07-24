@@ -1,4 +1,4 @@
-import { broadcast, getChatrooms } from "../state.js";
+import { broadcast, getChatrooms, replace } from "../state.js";
 
 import { redisClient } from "../controllers/redis.js";
 
@@ -7,7 +7,6 @@ export function setupWSHandlers(wss) {
     console.log('New WebSocket connection');
 
     ws.on('message', (message) => {
-      console.log('Received:', message.toString());
       process(ws, message);
     });
 
@@ -39,6 +38,7 @@ function process(ws, msg) {
 
 function sendMessage(msg) {
   let room_id = msg.payload.room;
+  console.log('Received message');
 
   broadcast(room_id, msg);
 }
@@ -51,6 +51,8 @@ function processHandshake(ws, msg) {
 
 async function processJoin(ws, msg) {
   let room = getChatrooms().get(msg.payload.room);
+
+  const ttl = await redisClient.ttl(msg.payload.room);
 
   if (!room) {
     let _payload = {
@@ -68,6 +70,33 @@ async function processJoin(ws, msg) {
     return;
   }
 
+  if (room.users.length >= 2) {
+    let _payload = {
+      success: false,
+      message: "room is full"
+    }
+
+    if (replace(msg.payload.room, msg.payload.session_id, ws) === false) {
+      ws.send(JSON.stringify({
+        "type": "system",
+        "payload": _payload
+      }));
+
+      ws.close();
+      return;
+    }
+
+    _payload.success = true;
+    _payload.ttl = ttl;
+
+    ws.send(JSON.stringify({
+      type: "system",
+      payload: _payload
+    }));
+
+    return;
+  }
+
   // Clean up any closed connections first
   room.users = room.users.filter(user => user.readyState === 1);
 
@@ -75,8 +104,9 @@ async function processJoin(ws, msg) {
   for (let i = 0; i < room.users.length; i++) {
     if (room.users[i].session_id === msg.payload.session_id) {
       let _payload = {
-        "success": false,
-        "message": "already in room"
+        "success": true,
+        "message": "already in room",
+        "ttl": ttl
       }
 
       ws.send(JSON.stringify({
@@ -84,35 +114,17 @@ async function processJoin(ws, msg) {
         payload: _payload
       }));
 
-      ws.close();
+      // ws.close();
 
-      console.log('Sent', _payload.toString());
+      console.log('Sent', JSON.stringify(_payload));
 
       return;
     }
   }
 
-  if (room.users.length >= 2) {
-    let _payload = {
-      "success": false,
-      "message": "room is full"
-    }
-
-    ws.send(JSON.stringify({
-      type: "system",
-      payload: _payload
-    }));
-
-    ws.close();
-
-    return;
-  }
-
   // Set session ID and add to room only after all checks pass
   ws.session_id = msg.payload.session_id;
   room.users.push(ws);
-
-  const ttl = await redisClient.ttl(msg.payload.room);
 
   let _payload = {
     "success": true,

@@ -133,7 +133,7 @@ function ChatContent() {
 
   return (
     <div id="content" className={`rounded-lg grow-in w-2xl px-8 py-8 mx-auto mb-4 bg-neutral-900 ${montserrat.className}`}>
-      <h2 className="text-2xl">
+      <h2 className="text-2xl mb-4">
         chat room
       </h2>
 
@@ -143,12 +143,12 @@ function ChatContent() {
         <SendChatButton />
       </div>
 
-      <p>others can join with the following room ID:</p>
+      <p className="mt-6">give this link to the person you&apos;d like to chat with (opens in new tab):</p>
         <p>
           <a target='_blank'
             href={`/chat/join?id=${roomId}`}
             className="underline">
-            {roomId}
+            {`/chat/join?id=${roomId}`}
           </a>
 
         </p>
@@ -157,7 +157,7 @@ function ChatContent() {
 }
 
 export default function ChatRoom() {
-  let [ttl, setTTL] = useState(600);
+  let [ttl, setTTL] = useState(null);
 
   function Timer() {
     return (
@@ -182,48 +182,45 @@ export default function ChatRoom() {
         return;
       }
 
-      try {
-        privkey = await window.crypto.subtle.importKey(
-          'jwk',
-          JSON.parse(privateKeyData),
-          {
-            name: 'RSA-OAEP',
-            modulusLength: 4096,
-            publicExponent: new Uint8Array([1, 0, 1]),
-            hash: "SHA-256"
-          },
-          true,
-          ['decrypt']
-        );
+      privkey = await window.crypto.subtle.importKey(
+        'jwk',
+        JSON.parse(privateKeyData),
+        {
+          name: 'RSA-OAEP',
+          modulusLength: 4096,
+          publicExponent: new Uint8Array([1, 0, 1]),
+          hash: "SHA-256"
+        },
+        true,
+        ['decrypt']
+      );
 
-        pubkey = await window.crypto.subtle.importKey(
-          'jwk',
-          JSON.parse(publicKeyData),
-          {
-            name: 'RSA-OAEP',
-            modulusLength: 4096,
-            publicExponent: new Uint8Array([1, 0, 1]),
-            hash: "SHA-256"
-          },
-          true,
-          ['encrypt']
-        );
-      } catch (error) {
-        console.error('Failed to import keys:', error);
-        return;
-      }
+      pubkey = await window.crypto.subtle.importKey(
+        'jwk',
+        JSON.parse(publicKeyData),
+        {
+          name: 'RSA-OAEP',
+          modulusLength: 4096,
+          publicExponent: new Uint8Array([1, 0, 1]),
+          hash: "SHA-256"
+        },
+        true,
+        ['encrypt']
+      );
     };
 
     initializeKeys();
 
-    if (process.env.DEVELOPMENT_MODE) {
-      BASE_URL = `ws://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
+    if (process.env.NODE_ENV === 'development') {
+      BASE_URL = `ws://127.0.0.1:2920`;
     } else {
       let split_url = window.location.origin.split('/');
       BASE_URL = `wss://${split_url[split_url.length-1]}`;
     }
 
     socket = new WebSocket(`${BASE_URL}/ws`);
+
+    // socket.close();
 
     let roomID = window.sessionStorage.getItem('room');
     let sessionID = window.localStorage.getItem('session-id');
@@ -271,7 +268,7 @@ export default function ChatRoom() {
       }).catch((error) => {
         console.error('Failed to join room:', error.message);
         socket.close();
-        // window.location.href = '/';
+        //window.location.href = '/';
       });
     };
 
@@ -352,7 +349,7 @@ export default function ChatRoom() {
         case "system":
           if (!data.payload.success) {
             socket.close();
-            // window.location.href = '/';
+            //window.location.href = '/';
           }
 
           if (data.payload.ttl != null) {
@@ -360,7 +357,15 @@ export default function ChatRoom() {
           }
 
           setInterval(() => {
-            setTTL(prev => prev > 0 ? prev - 1 : 0);
+            setTTL(prev => {
+              const newValue = prev > 0 ? prev - 1 : 0;
+
+              if (newValue <= 0) {
+                window.location.href = '/';
+              }
+
+              return newValue;
+            });
           }, 1000);
 
           break;

@@ -15,7 +15,7 @@ export async function createChat(req, res) {
     }
 
     await redisClient.set(chatCode, 1, {
-        EX: 605
+        EX: 600
     });
 
     newChatroom(chatCode);

@@ -2,6 +2,8 @@
 
 import AOS from 'aos';
 
+import Link from 'next/link';
+
 import { useEffect } from "react";
 
 import { DM_Serif_Text, Montserrat } from "next/font/google";
@@ -38,20 +40,20 @@ function HeroSection({ dmSerif, montserrat }) {
           say what you want—then watch it burn.
         </h3>
         <p id="" className="start-chat text-white mt-16 animate__animated animate__fadeInUp">
-          <a href="#features" className={montserrat.className}>
+          <Link href="/chat/create" className={montserrat.className}>
             <span className="mr-1 text-md w-4 h-4 inline-block">
               <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
             </span>
             start a chat
-          </a>
+          </Link>
         </p>
         <p id="" className="read-more text-white mt-2 animate__animated animate__fadeInUp">
-          <a href="#features" className={montserrat.className}>
+          <Link href="#features" className={montserrat.className}>
             <span className="mr-1 text-md w-3 h-3 inline-block">
               <FontAwesomeIcon icon={faArrowDown} />
             </span>
             read more
-          </a>
+          </Link>
         </p>
       </div>
     </div>
@@ -101,11 +103,11 @@ function BottomSection() {
     <div id="bottom" className="mx-auto max-w-3xl mb-40 text-center">
       <h1 data-aos-delay="100" data-aos="fade-up" className="header text-white text-4xl mt-4">ready to take back your privacy?</h1>
       <p data-aos-delay="300" data-aos="fade-up" className="start-chat text-2xl text-gray-100 mt-2">
-        <a href="#features">
+        <Link href="/chat/create">
           <span className="mr-2">
             <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
           </span>start a chat
-        </a>
+        </Link>
       </p>
     </div>
   );
@@ -117,20 +119,20 @@ function Footer() {
       <div className="grid grid-cols-2 gap-8 mx-auto max-w-4xl flex">
         <div className="inline align-middle">
           <p>
-            copyright © 2025 <a
+            copyright © 2025 <Link
               href="https://henry.moe"
               className="underline">
                 Henry Monteith
-            </a> and cinder labs
+            </Link> and cinder labs
           </p>
-          <p>powered by <a href="https://github.com/hmont/cinder" className="underline">cinder</a>
+          <p>powered by <Link href="https://github.com/hmont/cinder" className="underline">cinder</Link>
           </p>
         </div>
         <div className="text-right flex items-center justify-end">
           <p className="text-gray-200 text-2xl hover:text-white">
-            <a href="https://github.com/hmont/cinder">
+            <Link href="https://github.com/hmont/cinder">
                 <FontAwesomeIcon icon={faGithub} />
-            </a>
+            </Link>
           </p>
         </div>
       </div>

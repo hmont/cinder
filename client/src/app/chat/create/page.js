@@ -57,8 +57,8 @@ function Navbar() {
 
 export default function CreateChat() {
   useEffect(() => {
-    if (process.env.DEVELOPMENT_MODE) {
-      BASE_URL = `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
+    if (process.env.NODE_ENV === 'development') {
+      BASE_URL = `http://127.0.0.1:2920`;
     } else {
       let split_url = window.location.origin.split('/');
       BASE_URL = `https://${split_url[split_url.length-1]}`;
