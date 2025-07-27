@@ -70,6 +70,11 @@ function SendChatButton() {
 
     const partnerKeyData = window.sessionStorage.getItem('partner-public');
 
+    if (!partnerKeyData) {
+      alert('Please wait for your partner to join!');
+      return;
+    }
+
     let partner_pubkey = await window.crypto.subtle.importKey(
       'jwk',
       JSON.parse(partnerKeyData),
@@ -266,9 +271,9 @@ export default function ChatRoom() {
           }
         }));
       }).catch((error) => {
-        console.error('Failed to join room:', error.message);
+        alert('Failed to join room:', error.message);
         socket.close();
-        //window.location.href = '/';
+        window.location.href = '/';
       });
     };
 
@@ -349,7 +354,8 @@ export default function ChatRoom() {
         case "system":
           if (!data.payload.success) {
             socket.close();
-            //window.location.href = '/';
+            alert(data.payload.message);
+            window.location.href = '/';
           }
 
           if (data.payload.ttl != null) {
@@ -361,6 +367,9 @@ export default function ChatRoom() {
               const newValue = prev > 0 ? prev - 1 : 0;
 
               if (newValue <= 0) {
+                window.localStorage.clear();
+                window.sessionStorage.clear();
+
                 window.location.href = '/';
               }
 

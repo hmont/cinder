@@ -18,7 +18,7 @@ export function newChatroom(id) {
     setTimeout(() => {
         chatrooms.delete(id);
         console.log(`Room ${id} auto-deleted.`);
-    }, 10 * 60 * 1000);
+    }, (10 * 60 * 1000) + 5000);
 
     chatrooms.set(id, room);
 }

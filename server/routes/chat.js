@@ -1,5 +1,3 @@
-import { generate } from "generate-passphrase";
-
 import { redisClient } from "../controllers/redis.js";
 import { newChatroom } from "../state.js";
 
@@ -8,10 +6,10 @@ const generatorOptions = {
 };
 
 export async function createChat(req, res) {
-    let chatCode = generate(generatorOptions);
+    let chatCode = Math.random().toString(36).substring(2, 24);
 
     while ((await redisClient.get(chatCode)) !== null) {
-        chatCode = generate(generatorOptions);
+        chatCode = Math.random().toString(36).substring(2, 24);
     }
 
     await redisClient.set(chatCode, 1, {

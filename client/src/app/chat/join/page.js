@@ -57,7 +57,7 @@ function JoinRoomButton() {
     const nicknameInput = document.querySelector('#nickname-input');
     let nickname = nicknameInput.value;
 
-    window.sessionStorage.setItem('nickname', nickname !== null ? nickname : 'Guest');
+    window.sessionStorage.setItem('nickname', nickname.trim().length > 0 ? nickname : 'Guest');
 
     window.sessionStorage.setItem('room', roomID);
 
