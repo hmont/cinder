@@ -288,7 +288,7 @@ export default function ChatRoom() {
 
       switch (data.type) {
         case "handshake":
-          console.log("Recevied handshake");
+          // console.log("Recevied handshake");
 
           let pubkey = JSON.stringify(data.payload.public_key);
           let current_pubkey = window.sessionStorage.getItem('partner-public');
@@ -303,6 +303,8 @@ export default function ChatRoom() {
             messageElement.textContent = `${data.payload.nickname} joined the chat`;
 
             let chatInput = document.querySelector('#chat-input');
+
+            // window.sessionStorage.removeItem('cinder-public');
 
             chatInput.parentNode.insertBefore(messageElement, chatInput)
 
@@ -334,7 +336,7 @@ export default function ChatRoom() {
 
             const decoder = new TextDecoder();
             const decryptedText = decoder.decode(decrypted);
-            console.log(decryptedText);
+            // console.log(decryptedText);
 
             const messageElement = document.createElement('div');
             messageElement.className = 'message mb-2 p-2 bg-neutral-800 rounded';
