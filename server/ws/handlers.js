@@ -33,7 +33,22 @@ function process(ws, msg) {
     case "handshake":
       processHandshake(ws, data);
       break;
+    case "ttl":
+      processTTL(ws, data);
+      break;
   }
+}
+
+async function processTTL(ws, data) {
+  let _ttl = await redisClient.ttl(data.payload.room);
+
+  ws.send(JSON.stringify({
+    type: "system/ttl",
+    payload: {
+      success: true,
+      ttl: _ttl
+    }
+  }));
 }
 
 function sendMessage(msg) {

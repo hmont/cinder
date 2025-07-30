@@ -243,6 +243,9 @@ export default function ChatRoom() {
         }
       }));
 
+
+
+
       async function wait() {
         return new Promise((resolve, reject) => {
           const messageHandler = (event) => {
@@ -276,6 +279,17 @@ export default function ChatRoom() {
         window.location.href = '/';
       });
     };
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        socket.send(JSON.stringify({
+          type: 'ttl',
+          payload: {
+            room: roomID
+          }
+        }));
+      }
+    });
 
     setInterval(() => {
       socket.send(JSON.stringify({
@@ -380,6 +394,14 @@ export default function ChatRoom() {
           }, 1000);
 
           break;
+
+          case "system/ttl":
+            if (data.payload.success) {
+              setTTL(data.payload.ttl);
+            }
+
+            break;
+
       }
     }
 
