@@ -1,7 +1,5 @@
 "use client";
 
-import AOS from 'aos';
-
 import Link from 'next/link';
 
 import { useEffect } from "react";
@@ -11,8 +9,6 @@ import { DM_Serif_Text, Montserrat } from "next/font/google";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { faArrowUpRightFromSquare, faAnglesRight, faFire, faLock, faArrowDown } from '@fortawesome/free-solid-svg-icons';
-
-import 'aos/dist/aos.css';
 
 import 'animate.css';
 
@@ -64,12 +60,12 @@ function FeaturesSection() {
   return (
     <div id="features" className="items-center text-center">
       <div id="features-header" className="mx-auto max-w-3xl mb-8">
-        <h1 data-aos="fade-down" className="header text-6xl text-white">features</h1>
-        <h2 data-aos-delay="100" data-aos="fade-down" className="subhead text-gray-300 text-2xl mt-4">what makes cinder awesome.</h2>
+        <h1 className="header text-6xl text-white">features</h1>
+        <h2 className="subhead text-gray-300 text-2xl mt-4">what makes cinder awesome.</h2>
       </div>
 
       <div id="features-grid" className="text-white mx-auto grid grid-cols-3 gap-14 mt-20 mb-40 max-w-4xl">
-        <div id="ephemeral" data-aos="fade-up">
+        <div id="ephemeral">
           <p className="text-8xl"><FontAwesomeIcon icon={faFire} /></p>
           <h2 className="text-3xl mt-6">ephemeral</h2>
           <h2 className="text-md text-gray-400 mt-4">
@@ -77,7 +73,7 @@ function FeaturesSection() {
             no messages or data remain on our servers. no logs, no history, no evidence.
           </h2>
         </div>
-        <div id="encrypted" data-aos="fade-up" data-aos-delay="200">
+        <div id="encrypted">
           <p className="text-8xl"><FontAwesomeIcon icon={faLock} /></p>
           <h2 className="text-3xl mt-6">encrypted</h2>
           <h2 className="text-md text-gray-400 mt-4">
@@ -85,7 +81,7 @@ function FeaturesSection() {
             you and the person you&apos;re chatting with can read them—not even us.
           </h2>
         </div>
-        <div id="encrypted" data-aos="fade-up" data-aos-delay="400">
+        <div id="encrypted">
           <p className="text-8xl"><FontAwesomeIcon icon={faAnglesRight} /></p>
           <h2 className="text-3xl mt-6">instant</h2>
           <h2 className="text-md text-gray-400 mt-4">
@@ -101,8 +97,8 @@ function FeaturesSection() {
 function BottomSection() {
   return (
     <div id="bottom" className="mx-auto max-w-3xl mb-40 text-center">
-      <h1 data-aos-delay="100" data-aos="fade-up" className="header text-white text-4xl mt-4">ready to take back your privacy?</h1>
-      <p data-aos-delay="300" data-aos="fade-up" className="start-chat text-2xl text-gray-100 mt-2">
+      <h1 className="header text-white text-4xl mt-4">ready to take back your privacy?</h1>
+      <p className="start-chat text-2xl text-gray-100 mt-2">
         <Link href="/chat/create">
           <span className="mr-2">
             <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
@@ -142,10 +138,6 @@ function Footer() {
 
 export default function Home() {
   useEffect(() => {
-    AOS.init({
-      once: true,
-    });
-
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
