@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 
+import { motion } from "motion/react"
+
 import { useEffect } from "react";
 
 import { DM_Serif_Text, Montserrat } from "next/font/google";
@@ -59,36 +61,62 @@ function HeroSection({ dmSerif, montserrat }) {
 function FeaturesSection() {
   return (
     <div id="features" className="items-center text-center">
-      <div id="features-header" className="mx-auto max-w-3xl mb-8">
-        <h1 className="header text-6xl text-white">features</h1>
-        <h2 className="subhead text-gray-300 text-2xl mt-4">what makes cinder awesome.</h2>
-      </div>
+      <motion.div
+          id="ephemeral"
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.3, delay: 0 }}
+        >
+          <div id="features-header" className="mx-auto max-w-3xl mb-8">
+            <h1 className="header text-6xl text-white">features</h1>
+            <h2 className="subhead text-gray-300 text-2xl mt-4">what makes cinder awesome.</h2>
+          </div>
+        </motion.div>
 
       <div id="features-grid" className="text-white mx-auto grid grid-cols-3 gap-14 mt-20 mb-40 max-w-4xl">
-        <div id="ephemeral">
+        <motion.div
+          id="ephemeral"
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.3, delay: 0 }}
+        >
           <p className="text-8xl"><FontAwesomeIcon icon={faFire} /></p>
           <h2 className="text-3xl mt-6">ephemeral</h2>
           <h2 className="text-md text-gray-400 mt-4">
             all chatrooms self-destruct after 10 minutes.
             no messages or data remain on our servers. no logs, no history, no evidence.
           </h2>
-        </div>
-        <div id="encrypted">
+        </motion.div>
+        <motion.div
+          id="encrypted"
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
           <p className="text-8xl"><FontAwesomeIcon icon={faLock} /></p>
           <h2 className="text-3xl mt-6">encrypted</h2>
           <h2 className="text-md text-gray-400 mt-4">
             all chats are end-to-end encrypted. that means no one other than
             you and the person you&apos;re chatting with can read them—not even us.
           </h2>
-        </div>
-        <div id="encrypted">
+        </motion.div>
+        <motion.div
+          id="instant"
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.3, delay: 0.4 }}
+        >
           <p className="text-8xl"><FontAwesomeIcon icon={faAnglesRight} /></p>
           <h2 className="text-3xl mt-6">instant</h2>
           <h2 className="text-md text-gray-400 mt-4">
             no downloads, no sign-ups, no waiting. start a private chat in seconds—then
             watch it disappear in minutes.
           </h2>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
@@ -96,16 +124,24 @@ function FeaturesSection() {
 
 function BottomSection() {
   return (
-    <div id="bottom" className="mx-auto max-w-3xl mb-40 text-center">
-      <h1 className="header text-white text-4xl mt-4">ready to take back your privacy?</h1>
-      <p className="start-chat text-2xl text-gray-100 mt-2">
-        <Link href="/chat/create">
-          <span className="mr-2">
-            <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-          </span>start a chat
-        </Link>
-      </p>
-    </div>
+    <motion.div
+      id="instant"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.3, delay: 0.4 }}
+    >
+      <div id="bottom" className="mx-auto max-w-3xl mb-40 text-center">
+        <h1 className="header text-white text-4xl mt-4">ready to take back your privacy?</h1>
+        <p className="start-chat text-2xl text-gray-100 mt-2">
+          <Link href="/chat/create">
+            <span className="mr-2">
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+            </span>start a chat
+          </Link>
+        </p>
+      </div>
+    </motion.div>
   );
 }
 
