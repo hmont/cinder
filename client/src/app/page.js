@@ -151,7 +151,7 @@ function Footer() {
       <div className="grid grid-cols-2 gap-8 mx-auto max-w-4xl flex">
         <div className="inline align-middle">
           <p>
-            copyright © 2025 <Link
+            copyright © 2026 <Link
               href="https://henry.moe"
               className="underline">
                 Henry Monteith
